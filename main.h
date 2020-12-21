@@ -28,10 +28,16 @@
 	#define EXTERN
 #endif
 
+#define MIN_TO_TICK(x)			((x*60)*75/46)
 #define SYS_CLOCK        		4000000	//8000000 //14745600
-#define TIMEOUT_COUNT_1M30SEC 	180 //90sec
-#define TIMEOUT_COUNT_5MIN 		600 //300sec
-#define TIMEOUT_COUNT_20MIN 	2400 //1200sec
+
+#if 0 // original
+#define TIMEOUT_COUNT_5MIN 		489  // 98 = 489/5
+#define TIMEOUT_COUNT_20MIN 	1956 // 391 = 1956/5
+#else // shorten for test
+#define TIMEOUT_COUNT_5MIN 		98  // 98 = 489/5
+#define TIMEOUT_COUNT_20MIN 	391 // 391 = 1956/5
+#endif
 
 #define STATE_UV 		0
 #define STATE_WIND 		1

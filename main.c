@@ -24,7 +24,7 @@
 #include <avr/interrupt.h>
 
 
-volatile int timer_overflow_count = 0;
+volatile unsigned long timer_overflow_count = 0;
 int g_state;
 
 ISR(TIM0_OVF_vect) {
@@ -33,9 +33,13 @@ ISR(TIM0_OVF_vect) {
 
 int init_gpio(void)
 {
+#if 0 // original
 	DDRB = 0b00011001;
 	PORTB= 0b00011001;
-
+#else // add gpio for test
+	DDRB = 0b00011111;
+	PORTB= 0b00011111;
+#endif
 	return 0;
 }
 
@@ -104,6 +108,7 @@ void set_led_en(unsigned char st)
 
 void set_fan_en(unsigned char st)
 {
+#if 0 // original
 	if(st)
 	{
 		PORTB |= BIT4;
@@ -112,6 +117,20 @@ void set_fan_en(unsigned char st)
 	{
 		PORTB &= ~BIT4;
 	}
+#else // add gpio for test
+	if(st)
+	{
+		PORTB |= BIT4;
+		PORTB |= BIT1;
+		PORTB |= BIT2;
+	}
+	else
+	{
+		PORTB &= ~BIT4;
+		PORTB &= ~BIT1;
+		PORTB &= ~BIT2;
+	}
+#endif
 }
 
 
@@ -160,11 +179,12 @@ int main(void)
 				set_led_pwr_en(_OFF_);
 				set_led_en(_OFF_);
 				set_fan_en(_OFF_);
+				delay_1ms(100);
 
-				sei(); // Enable global interrupts
+//				sei(); // Enable global interrupts
 				set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 				sleep_mode();
-				sleep_disable();
+//				sleep_disable();
 
 				break;
 		}
