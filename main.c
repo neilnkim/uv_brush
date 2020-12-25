@@ -29,23 +29,20 @@ int g_state;
 
 ISR(TIM0_OVF_vect) {
 	timer_overflow_count++;
+	// 0.55sec
 }
 
 int init_gpio(void)
 {
-#if 0 // original
 	DDRB = 0b00011001;
 	PORTB= 0b00011001;
-#else // add gpio for test
-	DDRB = 0b00011111;
-	PORTB= 0b00011111;
-#endif
+
 	return 0;
 }
 
 int init_timer(void)
 {
-	// prescale timer to 1/1024th the clock rate
+	// prescale timer to 1/64 the clock rate
 	TCCR0B |= (1<<CS02) | (1<<CS00);
 
 	// enable timer overflow interrupt
@@ -108,7 +105,6 @@ void set_led_en(unsigned char st)
 
 void set_fan_en(unsigned char st)
 {
-#if 0 // original
 	if(st)
 	{
 		PORTB |= BIT4;
@@ -117,20 +113,6 @@ void set_fan_en(unsigned char st)
 	{
 		PORTB &= ~BIT4;
 	}
-#else // add gpio for test
-	if(st)
-	{
-		PORTB |= BIT4;
-		PORTB |= BIT1;
-		PORTB |= BIT2;
-	}
-	else
-	{
-		PORTB &= ~BIT4;
-		PORTB &= ~BIT1;
-		PORTB &= ~BIT2;
-	}
-#endif
 }
 
 
@@ -147,6 +129,18 @@ int main(void)
 
 	while(1)
 	{
+#if 0
+		if(timer_overflow_count >= 10)
+		{
+			timer_overflow_count = 0;
+
+			g_state = (g_state)? _OFF_: _ON_;
+
+			set_fan_en(g_state);
+			set_led_pwr_en(g_state);
+			set_led_en(g_state);
+		}
+#else
 		delay_1ms(10);
 		switch(g_state)
 		{
@@ -155,7 +149,7 @@ int main(void)
 				set_led_en(_ON_);
 				set_fan_en(_ON_);
 
-				if(timer_overflow_count > TIMEOUT_COUNT_5MIN)
+				if(timer_overflow_count >= TIMEOUT_COUNT_5MIN)
 				{
 					g_state = STATE_WIND;
 					timer_overflow_count = 0;
@@ -167,7 +161,7 @@ int main(void)
 				set_led_en(_OFF_);
 				set_fan_en(_ON_);
 
-				if(timer_overflow_count > TIMEOUT_COUNT_20MIN)
+				if(timer_overflow_count >= TIMEOUT_COUNT_20MIN)
 				{
 					g_state = STATE_OFF;
 					timer_overflow_count = 0;
@@ -181,13 +175,14 @@ int main(void)
 				set_fan_en(_OFF_);
 				delay_1ms(100);
 
-//				sei(); // Enable global interrupts
+				sei(); // Enable global interrupts
 				set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 				sleep_mode();
 //				sleep_disable();
 
 				break;
 		}
+#endif
 	}
 
 	return 0;
