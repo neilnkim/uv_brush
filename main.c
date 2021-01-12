@@ -123,24 +123,13 @@ int main(void)
 	sei();
 
 	g_state = STATE_UV;
+	timer_overflow_count = 0;
 	set_led_pwr_en(_ON_);
 	set_led_en(_ON_);
 	set_fan_en(_ON_);
 
 	while(1)
 	{
-#if 0
-		if(timer_overflow_count >= 10)
-		{
-			timer_overflow_count = 0;
-
-			g_state = (g_state)? _OFF_: _ON_;
-
-			set_fan_en(g_state);
-			set_led_pwr_en(g_state);
-			set_led_en(g_state);
-		}
-#else
 		delay_1ms(10);
 		switch(g_state)
 		{
@@ -182,7 +171,6 @@ int main(void)
 
 				break;
 		}
-#endif
 	}
 
 	return 0;

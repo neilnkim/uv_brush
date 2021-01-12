@@ -11,7 +11,7 @@
 #ifndef __VERSION_H__
 #define __VERSION_H__
 
-#define SW_VER            	01
+#define SW_VER            	02
 #define HW_VER            	01
 
 /* VERSION HISTORY ********************************
