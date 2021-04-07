@@ -150,7 +150,7 @@ int main(void)
 				set_led_en(_OFF_);
 				set_fan_en(_ON_);
 
-				if(timer_overflow_count >= TIMEOUT_COUNT_20MIN)
+				if(timer_overflow_count >= TIMEOUT_COUNT_30MIN) // was TIMEOUT_COUNT_20MIN
 				{
 					g_state = STATE_OFF;
 					timer_overflow_count = 0;

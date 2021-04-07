@@ -23,8 +23,9 @@
 #include "version.h"
 
 // 1tick = 0.55sec
-#define TIMEOUT_COUNT_5MIN 		(545+90+9) 	//545
-#define TIMEOUT_COUNT_20MIN 	(2182-218) 	//2182
+#define TIMEOUT_COUNT_5MIN 		(545+90+9) 	// 545
+#define TIMEOUT_COUNT_20MIN 	(2182-218) 	// 2182
+#define TIMEOUT_COUNT_30MIN 	(3365) 	//(2946) 		// 1964/2*3
 
 
 #define STATE_UV 		0
